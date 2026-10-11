@@ -1,0 +1,7 @@
+com\xifeng\bigevent\mapper\UserMapper.class
+com\xifeng\bigevent\controller\UserController.class
+com\xifeng\bigevent\service\UserService.class
+com\xifeng\bigevent\pojo\User.class
+com\xifeng\bigevent\pojo\Article.class
+com\xifeng\bigevent\service\impl\UserServiceImpl.class
+com\xifeng\bigevent\pojo\Category.class
