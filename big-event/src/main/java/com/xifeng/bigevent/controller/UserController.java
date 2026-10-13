@@ -3,6 +3,7 @@ package com.xifeng.bigevent.controller;
 import com.xifeng.bigevent.pojo.Result;
 import com.xifeng.bigevent.pojo.User;
 import com.xifeng.bigevent.service.UserService;
+import com.xifeng.bigevent.util.JwtUtil;
 import com.xifeng.bigevent.util.Md5Util;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/user")
 @Validated
 public class UserController {
     @Autowired
     private UserService userService;
-
+//注册
     @PostMapping("/register")//注册接口用post，路径/user/register
     public Result register(@Pattern(regexp = "^\\S{5,16}$") @RequestParam String username, @Pattern(regexp = "^\\S{5,16}$") @RequestParam String password){
         //@Validated，@Pattern正则表达式自动参数校验
@@ -37,6 +42,7 @@ public class UserController {
         }
     }
 
+    //登录
     @PostMapping("/login")
     public Result<String> login(@Pattern(regexp = "^\\S{5,16}$") @RequestParam String username, @Pattern(regexp = "^\\S{5,16}$") @RequestParam String password){
         //根据用户名查询用户
@@ -46,8 +52,15 @@ public class UserController {
         }
         //判断密码是否正确（数据库中存的是MD5加密后的密码）
         if(loginUser.getPassword().equals(Md5Util.getMD5String(password))){
-            return Result.success("登录成功");
+            //登陆成功
+            //把id，username塞入Map集合claims中，，生成JWT令牌token，输出令牌
+            Map<String, Object> claims=new HashMap<>();
+            claims.put("id",loginUser.getId());
+            claims.put("username",loginUser.getUsername());
+            String token = JwtUtil.genToken(claims);
+            return Result.success(token);
         }else{
+            //登陆失败
             return Result.error("密码错误");
         }
     }

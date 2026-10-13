@@ -3,6 +3,7 @@ package com.xifeng.bigevent.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+//MD5加密工具类
 public class Md5Util {
     /**
      * 默认的密码字符串组合，用来将字节转换成 16 进制表示的字符,apache校验下载的文件的正确性用的就是默认的这个组合
